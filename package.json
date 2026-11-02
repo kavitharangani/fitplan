@@ -1,0 +1,9 @@
+{
+  "name": "fitplan",
+  "version": "1.0.0",
+  "private": true,
+  "description": "FitPlan – Health & Gym System",
+  "scripts": {
+    "dev": "node dev-server.js"
+  }
+}

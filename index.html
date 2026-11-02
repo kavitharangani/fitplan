@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>FitPlan – Health & Gym System</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="logo">💪</span>
+      <div>
+        <h1>FitPlan</h1>
+        <p>BMI · Diet plan · Workout schedule</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <div id="userBox" class="user-box hidden">
+        <span class="avatar" id="userAvatar"></span>
+        <span id="userName" class="user-name"></span>
+        <button type="button" id="logoutBtn" class="btn small ghost">Log out</button>
+      </div>
+      <button id="themeBtn" class="icon-btn" title="Toggle theme" aria-label="Toggle theme">🌓</button>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- LOGIN / SIGN UP -->
+    <section class="card auth-card hidden" id="authCard">
+      <h2 id="authTitle">Welcome back</h2>
+      <p class="muted" id="authSub">Log in to see your plan.</p>
+      <div class="auth-tabs" role="tablist">
+        <button type="button" data-auth="login" class="active">Log in</button>
+        <button type="button" data-auth="signup">Sign up</button>
+      </div>
+      <form id="authForm" novalidate>
+        <label>Username
+          <input type="text" id="authUser" autocomplete="username" maxlength="30" placeholder="e.g. kavi" />
+        </label>
+        <label>Password
+          <input type="password" id="authPass" autocomplete="current-password" placeholder="At least 6 characters" />
+        </label>
+        <label id="confirmWrap" class="hidden">Confirm password
+          <input type="password" id="authPass2" autocomplete="new-password" />
+        </label>
+        <p id="authError" class="error" role="alert"></p>
+        <button type="submit" id="authSubmit" class="btn primary">Log in</button>
+      </form>
+      <p class="muted small-note">Accounts are saved in this browser on this device.</p>
+    </section>
+
+    <!-- INPUT FORM -->
+    <section class="card hidden" id="formCard">
+      <h2>Your details</h2>
+      <form id="profileForm" novalidate>
+        <div class="grid">
+          <label>Name
+            <input type="text" id="name" placeholder="Optional" maxlength="40" />
+          </label>
+
+          <label>Age (years)
+            <input type="number" id="age" min="10" max="100" required placeholder="e.g. 25" />
+          </label>
+
+          <label>Gender
+            <select id="gender">
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </label>
+
+          <label>Weight (kg)
+            <input type="number" id="weight" min="20" max="300" step="0.1" required placeholder="e.g. 68" />
+          </label>
+
+          <div class="field">
+            <span class="field-label">Height
+              <span class="seg" role="group" aria-label="Height unit">
+                <button type="button" data-unit="cm" class="active">cm</button>
+                <button type="button" data-unit="ft">ft / in</button>
+              </span>
+            </span>
+            <div id="heightCm">
+              <input type="number" id="height" min="100" max="250" step="0.1" placeholder="e.g. 165" />
+            </div>
+            <div id="heightFt" class="two hidden">
+              <input type="number" id="feet" min="3" max="8" placeholder="ft" />
+              <input type="number" id="inches" min="0" max="11.9" step="0.1" placeholder="in" />
+            </div>
+          </div>
+
+          <label>Daily activity
+            <select id="activity">
+              <option value="1.2">Sedentary (desk job, little exercise)</option>
+              <option value="1.375" selected>Light (1–3 days/week exercise)</option>
+              <option value="1.55">Moderate (3–5 days/week)</option>
+              <option value="1.725">Very active (6–7 days/week)</option>
+              <option value="1.9">Athlete / physical job</option>
+            </select>
+          </label>
+
+          <label>Fitness level
+            <select id="level">
+              <option value="beginner">Beginner</option>
+              <option value="intermediate">Intermediate</option>
+              <option value="advanced">Advanced</option>
+            </select>
+          </label>
+
+          <label>Goal
+            <select id="goal">
+              <option value="auto">Auto (based on BMI)</option>
+              <option value="lose">Lose weight</option>
+              <option value="maintain">Maintain weight</option>
+              <option value="gain">Gain weight / build muscle</option>
+            </select>
+          </label>
+
+          <label>Food preference
+            <select id="diet">
+              <option value="n">Non-vegetarian</option>
+              <option value="e">Vegetarian + eggs</option>
+              <option value="v">Pure vegetarian</option>
+            </select>
+          </label>
+
+          <label>Preferred workout time
+            <select id="wtime">
+              <option value="morning">Morning (before breakfast)</option>
+              <option value="evening">Evening (after work)</option>
+            </select>
+          </label>
+
+          <label>BMI standard
+            <select id="standard">
+              <option value="asian">Asian / Sri Lankan (WHO Asia)</option>
+              <option value="who">International (WHO)</option>
+            </select>
+          </label>
+        </div>
+
+        <p id="formError" class="error" role="alert"></p>
+        <div class="actions">
+          <button type="submit" class="btn primary">Save &amp; generate my plan</button>
+          <button type="button" id="resetBtn" class="btn ghost">Clear form</button>
+          <button type="button" id="cancelEdit" class="btn ghost hidden">Cancel</button>
+        </div>
+      </form>
+    </section>
+
+    <!-- RESULTS -->
+    <div id="results" class="hidden">
+      <section class="card" id="summaryCard">
+        <div class="card-head">
+          <h2 id="greeting">Your results</h2>
+          <div class="head-actions">
+            <button id="editBtn" class="btn small ghost">✏️ Edit details</button>
+            <button id="saveBtn" class="btn small">Save to progress</button>
+            <button id="printBtn" class="btn small ghost">Print</button>
+          </div>
+        </div>
+
+        <div class="bmi-hero">
+          <div class="bmi-number">
+            <span class="label">BMI</span>
+            <span id="bmiValue" class="value">--</span>
+            <span id="bmiCat" class="badge">--</span>
+          </div>
+          <div class="bmi-gauge-wrap">
+            <div id="gauge" class="gauge"></div>
+            <div id="gaugeMarker" class="gauge-marker"><span></span></div>
+            <div id="gaugeLabels" class="gauge-labels"></div>
+          </div>
+        </div>
+
+        <p id="verdict" class="verdict"></p>
+
+        <div class="stats" id="stats"></div>
+        <div id="warnings"></div>
+      </section>
+
+      <nav class="tabs" role="tablist">
+        <button role="tab" class="tab active" data-tab="diet">🥗 Diet plan</button>
+        <button role="tab" class="tab" data-tab="workout">🏋️ Exercise plan</button>
+        <button role="tab" class="tab" data-tab="schedule">⏰ Daily timetable</button>
+        <button role="tab" class="tab" data-tab="progress">📈 Progress</button>
+      </nav>
+
+      <section class="card tab-panel" id="tab-diet">
+        <div class="card-head">
+          <h2>Diet plan</h2>
+          <div class="day-picker" id="dietDays"></div>
+        </div>
+        <div class="macros" id="macros"></div>
+        <div id="meals" class="meals"></div>
+        <div id="dietTips" class="tips"></div>
+      </section>
+
+      <section class="card tab-panel hidden" id="tab-workout">
+        <div class="card-head">
+          <h2>Weekly exercise plan</h2>
+        </div>
+        <p id="workoutIntro" class="muted"></p>
+        <p class="muted small-note">▶ Tap any exercise to watch a how-to video.</p>
+        <div id="week" class="week"></div>
+        <div id="workoutTips" class="tips"></div>
+      </section>
+
+      <section class="card tab-panel hidden" id="tab-schedule">
+        <div class="card-head">
+          <h2>Daily timetable</h2>
+        </div>
+        <p class="muted">A sample day that combines your meals, workout, water and sleep.</p>
+        <ol id="timeline" class="timeline"></ol>
+      </section>
+
+      <section class="card tab-panel hidden" id="tab-progress">
+        <div class="card-head">
+          <h2>Progress history</h2>
+          <button id="clearHistory" class="btn small ghost">Clear history</button>
+        </div>
+        <p class="muted">Click <b>Save to progress</b> each week to track your weight and BMI. Data stays in this browser only.</p>
+        <div id="chart" class="chart"></div>
+        <div id="history"></div>
+      </section>
+
+      <p class="disclaimer">
+        This app gives general guidance only. It is not medical advice. If you have a medical condition, are pregnant,
+        or are under 18 or over 65, talk to a doctor before starting a new diet or exercise program.
+      </p>
+    </div>
+  </main>
+
+  <dialog id="videoDialog" class="video-dialog" aria-labelledby="videoTitle">
+    <div class="video-head">
+      <h3 id="videoTitle">Exercise</h3>
+      <button type="button" id="videoClose" class="icon-btn" aria-label="Close video">✕</button>
+    </div>
+    <div id="videoFrame" class="video-frame"></div>
+    <a id="videoLink" class="video-link" href="#" target="_blank" rel="noopener">Open on YouTube ↗</a>
+  </dialog>
+
+  <script src="js/vendor/motion.js"></script>
+  <script src="js/fx.js"></script>
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
